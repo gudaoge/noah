@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--开启注解扫描,扫描所有controller-->
+    <context:component-scan base-package="com.origin.noah.controller"/>
+
+    <!--开启handler和mapping-->
+    <mvc:annotation-driven conversion-service="conversionService">
+        <!--添加自定义的消息转换器 @requestBody和@responseBody会启用-->
+        <mvc:message-converters>
+            <!--字符串转换 设置为utf-8 防止乱码-->
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <constructor-arg value="UTF-8" index="0"/>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <!--添加自定义的转换器 供参数绑定使用-->
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="converters">
+            <list>
+                <!---->
+                <!--<bean id="converter" />-->
+            </list>
+        </property>
+    </bean>
+
+    <!--视图解析器-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!-- 前缀 -->
+        <property name="prefix" value="/WEB-INF/view/"/>
+        <!-- 后缀 -->
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <!--静态资源解析-->
+    <!--1.使用默认的servlet解析-->
+    <mvc:default-servlet-handler/>
+    <!--2.使用springMVC解析静态资源-->
+    <!--<mvc:resources mapping="/resource/**" location="/"/>-->
+
+</beans>
